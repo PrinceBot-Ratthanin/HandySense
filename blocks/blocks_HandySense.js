@@ -1,12 +1,13 @@
 Blockly.Blocks['HandySense_Setup'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("HandySense_Setup");
+        .appendField("HandySense_Setup Link >>");
+    this.appendValueInput("URL_HandySense");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour("#3dc45c");
- this.setTooltip("setup HUSKYLENS camera");
+ this.setTooltip("setup command for HandySense");
  this.setHelpUrl("");
   }
 };
@@ -42,7 +43,7 @@ Blockly.Blocks['HandySense_Update'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour("#3dc45c");
- this.setTooltip("setup HUSKYLENS camera");
+ this.setTooltip("Update data from sensor to Wed app");
  this.setHelpUrl("");
   }
 };

@@ -3,8 +3,19 @@ module.exports = [
 		name : "HandySense",
 		blocks : [
     {xml: `<sep gap="32"></sep><label text="คำสั่งที่ใช้งานในฟังก์ชั่น Setup" web-class="headline"></label>`},
+      
+		  //'HandySense_Setup',
+      {
+        xml:
+        `<block type="HandySense_Setup">
+                <value name="URL_HandySense">
+                    <shadow type="basic_string">
+                        <field name="VALUE">https://handy-sense-netpie.web.app/</field>
+                    </shadow>
+                </value>
+            </block>`
+      },
       'HandySense_setPin_OldPCB',
-		  'HandySense_Setup',
       'HandySense_setTime_Interval_Sensor',
       'HandySense_setTime_Interval_publishData',
       {
@@ -78,14 +89,54 @@ module.exports = [
                 </value>
             </block>`
       },
-      'HandySense_CalSoilSensor',
+      //'HandySense_CalSoilSensor',
       'HandySense_statusRelay',
-      'HandySense_Set_statusRelay',
-      'HandySense_Update_StatusRelay',
+      //'HandySense_Set_statusRelay',
+      {
+        xml:
+        `<block type="HandySense_Set_statusRelay">
+                <value name="Relay_Status">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+            </block>`
+      },
+      //'HandySense_Update_StatusRelay',
       'HandySense_statusSensor',
-      'HandySense_Map',
-      {xml: `<sep gap="32"></sep><label text="Web สำหรับใช้งาน Application" web-class="headline"></label>`},
-      {xml: `<sep gap="32"></sep><label text="https://handy-sense-netpie.web.app/" web-class="headline"></label>`},
+      //'HandySense_Map',
+      {
+        xml:
+        `<block type="HandySense_Map">
+                <value name="input">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+                <value name="in_min">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+                <value name="in_max">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+                <value name="out_min">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+                <value name="out_max">
+                    <shadow type="math_number">
+                        <field name="NUM">0</field>
+                    </shadow>
+                </value>
+            </block>`
+      },
+      {xml: `<sep gap="32"></sep><label text="LED status Wifi = 2 " web-class="headline"></label>`},
+      {xml: `<sep gap="32"></sep><label text="LED status Server = 12 " web-class="headline"></label>`},
 		]
 	}	
 ];

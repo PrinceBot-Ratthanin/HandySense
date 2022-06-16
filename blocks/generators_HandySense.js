@@ -62,6 +62,15 @@ Blockly.JavaScript['HandySense_Setup'] = function(block) {
     var dropdown_Relay_ch = block.getFieldValue('Relay_ch');
     var value_Relay_Status = Blockly.JavaScript.valueToCode(block, 'Relay_Status', Blockly.JavaScript.ORDER_ATOMIC);
     var code = `RelayStatus[${dropdown_Relay_ch}] = ${value_Relay_Status};\n`;
+    if(value_Relay_Status == '0'){
+      code +=`Close_relay(${dropdown_Relay_ch});\n`;
+      code += `check_sendData_status = 1;\n`;
+    }
+    else if(value_Relay_Status == '1'){
+      code +=`Open_relay(${dropdown_Relay_ch});\n`;
+      code += `check_sendData_status = 1;\n`;
+    }
+    
     return code;
   };
   Blockly.JavaScript['HandySense_Update_StatusRelay'] = function(block) {
