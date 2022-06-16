@@ -172,6 +172,9 @@ int ErrorSensor_Status[4] = {0, 0, 0, 0};
 int status_sht31_error = 0;
 int status_light_error = 0;
 int status_soil_error  = 0;
+int status_count_wifi = 0;
+unsigned long timer_of_connect_wifi = 0;
+int state_timer_of_connect_wifi = 0;
 
 // ตัวแปรเก็บค่าการตั้งเวลาทำงานอัตโนมัติ
 unsigned int time_open[4][7][3] = {{{2000, 2000, 2000}, {2000, 2000, 2000}, {2000, 2000, 2000},
@@ -951,19 +954,26 @@ float analog_to_percent(int RawAnalog) {
 void connectWIFI() {
   connectWifiStatus = cannotConnect;
   if (WiFi.status() != WL_CONNECTED) {
+  	WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
     WiFi.begin(ssid.c_str(), password.c_str());
     int count_ConnectWIFI = 0;
-    while (WiFi.status() != WL_CONNECTED) {
-      if (count_ConnectWIFI > 30) {
+    status_count_wifi ++;
+    while (WiFi.status() != WL_CONNECTED && status_count_wifi < 3) {
+    	digitalWrite(LED_WIFI, LOW);
+    	delay(100);
+    	digitalWrite(LED_WIFI, HIGH);
+    	delay(100);
+      if (count_ConnectWIFI > 15) {
       	DEBUG_PRINTLN("cannotConnect WIFI" );
         break;
       }
       count_ConnectWIFI ++;
-      delay(100);
     }
   }
   if (WiFi.status() == WL_CONNECTED) {
       connectWifiStatus = wifiConnected;
+      status_count_wifi = 0;
       if (!client.connected()) {
         client.setServer(mqtt_server.c_str(), mqtt_port.toInt());
         client.setCallback(callback);
@@ -1042,12 +1052,19 @@ void setup_HandySense() {
 
 void loop_HandySense(float Soil_RawData, float brightness_RawData, float Temp_RawData, int Hum_RawData) {
 
+	if(state_timer_of_connect_wifi == 0){timer_of_connect_wifi = millis(); state_timer_of_connect_wifi = 1;}
+	if(millis() - timer_of_connect_wifi > 120000){
+		
+		state_timer_of_connect_wifi = 0;
+		status_count_wifi = 0;
+	}
 	connectWIFI();
   if (client.connected()) {
   	  connectWifiStatus = serverConnected;
-	  sendStatus_RelaytoWeb();
+	  
 	  send_soilMinMax();
 	  send_tempMinMax();
+	  sendStatus_RelaytoWeb();
 	  client.loop();
 	  if(state_fristTime == 0){
 	  	UpdateData_To_Server();
